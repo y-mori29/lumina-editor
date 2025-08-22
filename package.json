@@ -1,0 +1,17 @@
+{
+  "name": "lumina-editor",
+  "private": true,
+  "workspaces": ["apps/*", "services/*"],
+  "scripts": {
+    "dev:web": "pnpm --filter @lumina/web dev",
+    "dev:rembg": "python services/rembg/main.py",
+    "dev:all": "concurrently -k \"pnpm dev:web\" \"pnpm dev:rembg\"",
+    "lint": "pnpm --filter @lumina/web lint",
+    "typecheck": "pnpm --filter @lumina/web typecheck",
+    "test": "pnpm --filter @lumina/web test",
+    "e2e": "pnpm --filter @lumina/web test:e2e"
+  },
+  "devDependencies": {
+    "concurrently": "^8.0.1"
+  }
+}
