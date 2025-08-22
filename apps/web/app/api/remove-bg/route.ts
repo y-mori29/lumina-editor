@@ -1,17 +1,26 @@
 import { NextResponse } from 'next/server';
-import sharp from 'sharp';
 
 export async function POST(request: Request) {
-  const data = await request.formData();
-  const file = data.get('file') as File | null;
+  const formData = await request.formData();
+  const file = formData.get('file');
   if (!file) {
     return NextResponse.json({ error: 'No file provided' }, { status: 400 });
   }
-  const arrayBuffer = await file.arrayBuffer();
-  const input = Buffer.from(arrayBuffer);
-  // Placeholder: currently just returns the input without background removal
-  const output = await sharp(input).png().toBuffer();
-  return new NextResponse(output, {
+
+  const response = await fetch('http://localhost:7000/remove-bg', {
+    method: 'POST',
+    body: formData,
+  });
+
+  if (!response.ok) {
+    return NextResponse.json(
+      { error: 'Failed to remove background' },
+      { status: response.status }
+    );
+  }
+
+  const arrayBuffer = await response.arrayBuffer();
+  return new NextResponse(arrayBuffer, {
     headers: { 'Content-Type': 'image/png' },
   });
 }

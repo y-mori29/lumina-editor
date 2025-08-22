@@ -13,17 +13,31 @@ pnpm install
 ```
 
 ## 開発
-別ターミナルで以下を実行します。
+Next.js フロントエンドと Python 製の背景削除サービスを同時に起動します。別ターミナルで以下を実行してください。
 ```
-# Next.js フロントエンド
+# Next.js フロントエンド (http://localhost:3000)
 pnpm dev:web
 
-# rembg サービス
+# rembg サービス (http://localhost:7000)
 pnpm dev:rembg
 ```
-または一括起動:
+もしくは一括起動:
 ```
 pnpm dev:all
+```
+
+### API 呼び出し例
+`curl`:
+```
+curl -X POST -F "file=@sample.png" http://localhost:3000/api/remove-bg --output out.png
+```
+
+フロントエンドの `fetch`:
+```ts
+const formData = new FormData();
+formData.append('file', file);
+const res = await fetch('/api/remove-bg', { method: 'POST', body: formData });
+const blob = await res.blob();
 ```
 
 ## テスト
